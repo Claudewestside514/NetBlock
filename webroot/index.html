@@ -1,1 +1,683 @@
-<!-- PLACEHOLDER -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>NetBlock</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root{--bg:#000000;--bg-secondary:#1c1c1e;--bg-tertiary:#2c2c2e;--accent:#0a84ff;--success:#30d158;--danger:#ff453a;--warning:#ff9f0a;--text:#ffffff;--text-secondary:#8e8e93;--separator:#38383a;--glass:rgba(28,28,30,0.6)}
+
+*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.47059;font-weight:400;letter-spacing:-0.022em;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+
+.container{max-width:100%;margin:0 auto;padding:0 16px}
+
+.header{background:linear-gradient(180deg,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.7) 100%);backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:16px 0;padding-top:max(16px,env(safe-area-inset-top));position:sticky;top:0;z-index:100}
+
+.header-content{display:flex;justify-content:space-between;align-items:center;padding:0 16px}
+
+.header-title{font-size:34px;font-weight:700;letter-spacing:-0.021em}
+
+.header-subtitle{font-size:15px;color:var(--text-secondary);margin-top:2px;font-weight:400}
+
+.header-actions{display:flex;gap:8px}
+
+.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--glass);border:0.5px solid var(--separator);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s}
+
+.icon-btn:active{transform:scale(0.92);opacity:0.8}
+
+.control-center{background:linear-gradient(145deg,#1c1c1e 0%,#2c2c2e 100%);border-radius:24px;padding:20px;margin:16px;border:0.5px solid var(--separator);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+
+.status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+
+.status-card{background:rgba(0,0,0,0.3);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;border:0.5px solid var(--separator);transition:all 0.3s}
+
+.status-card.active{background:rgba(48,209,88,0.15);border-color:rgba(48,209,88,0.3)}
+
+.status-card.inactive{background:rgba(255,69,58,0.15);border-color:rgba(255,69,58,0.3)}
+
+.status-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
+
+.status-card.active .status-icon{background:rgba(48,209,88,0.2);color:var(--success)}
+
+.status-card.inactive .status-icon{background:rgba(255,69,58,0.2);color:var(--danger)}
+
+.status-info{flex:1}
+
+.status-label{font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px}
+
+.status-value{font-size:20px;font-weight:600}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+
+.stat-pill{background:rgba(255,255,255,0.05);border-radius:12px;padding:12px 8px;text-align:center;border:0.5px solid var(--separator)}
+
+.stat-number{font-size:24px;font-weight:700;color:var(--accent);line-height:1}
+
+.stat-desc{font-size:11px;color:var(--text-secondary);margin-top:4px;text-transform:uppercase;letter-spacing:0.05em}
+
+.action-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+
+.action-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px;background:rgba(255,255,255,0.05);border:0.5px solid var(--separator);border-radius:14px;cursor:pointer;transition:all 0.2s}
+
+.action-btn:active{transform:scale(0.95);background:rgba(255,255,255,0.1)}
+
+.action-icon{width:56px;height:56px;border-radius:12px;background:var(--bg-tertiary);display:flex;align-items:center;justify-content:center;color:var(--accent)}
+
+.action-icon .material-icons-round{font-size:32px}
+
+.action-btn span{font-size:11px;color:var(--text-secondary);font-weight:500}
+
+.search-container{padding:0 16px 16px}
+
+.search-box{width:100%;height:44px;background:var(--bg-secondary);border:0.5px solid var(--separator);border-radius:12px;padding:0 12px 0 40px;color:var(--text);font-size:17px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%238e8e93'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;background-size:20px}
+
+.search-box::placeholder{color:var(--text-secondary)}
+
+.search-box:focus{outline:none;border-color:var(--accent)}
+
+.ios-list{background:var(--bg-secondary);border-radius:16px;overflow:hidden;border:0.5px solid var(--separator);margin:0 16px 20px}
+
+.list-header{padding:10px 16px;font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.2)}
+
+.toggle-text{font-size:13px;color:var(--accent);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:500}
+
+.list-item{display:flex;align-items:center;padding:12px 16px;border-bottom:0.5px solid var(--separator);min-height:64px;transition:background 0.2s;position:relative}
+
+.list-item:last-child{border-bottom:none}
+
+.list-item:active{background:rgba(255,255,255,0.05)}
+
+.list-item.blocked{background:rgba(10,132,255,0.08)}
+
+.app-icon{width:44px;height:44px;border-radius:10px;margin-right:12px;background:var(--bg-tertiary);object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
+.app-info{flex:1;min-width:0}
+
+.app-name{font-size:17px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.app-package{font-size:12px;color:var(--text-secondary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:"SF Mono",monospace}
+
+.ios-toggle{position:relative;width:51px;height:31px;flex-shrink:0}
+
+.ios-toggle input{opacity:0;width:0;height:0;position:absolute}
+
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--bg-tertiary);border:0.5px solid var(--separator);border-radius:31px;transition:0.3s}
+
+.toggle-slider:before{position:absolute;content:"";height:27px;width:27px;left:1px;bottom:1px;background-color:white;border-radius:50%;transition:0.3s;box-shadow:0 3px 8px rgba(0,0,0,0.15),0 1px 1px rgba(0,0,0,0.16)}
+
+input:checked+.toggle-slider{background-color:var(--accent);border-color:var(--accent)}
+
+input:checked+.toggle-slider:before{transform:translateX(20px)}
+
+.empty{text-align:center;padding:60px 20px;color:var(--text-secondary)}
+
+.loading{text-align:center;padding:40px;color:var(--text-secondary)}
+
+.spinner{width:32px;height:32px;border:3px solid var(--bg-tertiary);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(44,44,46,0.95);color:white;padding:12px 24px;border-radius:20px;font-size:15px;font-weight:500;opacity:0;transition:all 0.3s;z-index:1000;backdrop-filter:blur(20px);border:0.5px solid rgba(255,255,255,0.1);box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.3s}
+
+.modal-overlay.show{opacity:1;pointer-events:auto}
+
+.modal{position:fixed;bottom:0;left:0;right:0;background:var(--bg-secondary);border-radius:24px 24px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform 0.3s;z-index:1001;max-width:414px;margin:0 auto;border-top:0.5px solid var(--separator)}
+
+.modal-overlay.show~.modal{transform:translateY(0)}
+
+.modal-title{font-size:20px;font-weight:600;text-align:center;margin-bottom:20px;color:var(--text)}
+
+.modal-btn{width:100%;height:44px;border-radius:12px;border:none;background:var(--bg-tertiary);color:var(--accent);font-size:17px;font-weight:400;margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+
+.modal-btn:active{opacity:0.7}
+
+.modal-btn.destructive{color:var(--danger);font-weight:600}
+
+.modal-btn.cancel{font-weight:600;margin-top:8px}
+
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.3s}
+
+.sheet-overlay.show{opacity:1;pointer-events:auto}
+
+.sheet{position:fixed;bottom:0;left:16px;right:16px;z-index:1001;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1)}
+
+.sheet-overlay.show~.sheet{transform:translateY(0)}
+
+.sheet-card{background:var(--bg-secondary);border-radius:16px;overflow:hidden;margin-bottom:12px;border:0.5px solid var(--separator)}
+
+.sheet-title{font-size:13px;color:var(--text-secondary);text-align:center;padding:16px 20px 8px;font-weight:400}
+
+.sheet-btn{width:100%;height:56px;border:none;background:transparent;color:var(--accent);font-size:17px;font-weight:400;cursor:pointer;transition:all 0.15s;border-bottom:0.5px solid var(--separator);display:flex;align-items:center;justify-content:center}
+
+.sheet-btn:last-child{border-bottom:none}
+
+.sheet-btn:active{background:rgba(255,255,255,0.1)}
+
+.sheet-btn.destructive{color:var(--danger);font-weight:600}
+
+.sheet-cancel{background:var(--bg-secondary);border-radius:16px;border:0.5px solid var(--separator);height:56px;width:100%;color:var(--accent);font-size:17px;font-weight:600;cursor:pointer;transition:all 0.15s;margin-bottom:env(safe-area-inset-bottom)}
+
+.sheet-cancel:active{background:rgba(255,255,255,0.1)}
+
+::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div>
+      <div class="header-title">NetBlock</div>
+      <div class="header-subtitle">Internet Firewall</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="createShortcut()" title="Create Shortcut">
+        <span class="material-icons-round" style="font-size:20px;">add_to_home_screen</span>
+      </button>
+      <button class="icon-btn" onclick="showBackup()" title="Backup">
+        <span class="material-icons-round" style="font-size:20px;">restore</span>
+      </button>
+      <button class="icon-btn" onclick="openSupport()" title="Support">
+        <span class="material-icons-round" style="font-size:20px;">volunteer_activism</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="control-center">
+  <div class="status-grid">
+    <div class="status-card" id="status-card">
+      <div class="status-icon">
+        <span class="material-icons-round">shield</span>
+      </div>
+      <div class="status-info">
+        <div class="status-label">Firewall</div>
+        <div class="status-value" id="status-text">Inactive</div>
+      </div>
+    </div>
+    <div class="status-card">
+      <div class="status-icon" style="background:rgba(10,132,255,0.2);color:var(--accent)">
+        <span class="material-icons-round">wifi_off</span>
+      </div>
+      <div class="status-info">
+        <div class="status-label">Offline</div>
+        <div class="status-value" id="blocked-count">0</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stats-grid">
+    <div class="stat-pill">
+      <div class="stat-number" id="total-count">0</div>
+      <div class="stat-desc">Apps</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-number" id="active-rules">0</div>
+      <div class="stat-desc">Rules</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-number" id="system-blocked">0</div>
+      <div class="stat-desc">Pivotal</div>
+    </div>
+  </div>
+  
+  <div class="action-grid">
+    <button class="action-btn" onclick="loadApps()">
+      <div class="action-icon">
+        <span class="material-icons-round">sync</span>
+      </div>
+      <span>Refresh</span>
+    </button>
+    <button class="action-btn" onclick="toggleSystemApps()">
+      <div class="action-icon">
+        <span class="material-icons-round" id="system-icon">apps</span>
+      </div>
+      <span id="system-text">User Apps</span>
+    </button>
+    <button class="action-btn" onclick="verifyRules()">
+      <div class="action-icon">
+        <span class="material-icons-round">fact_check</span>
+      </div>
+      <span>Verify</span>
+    </button>
+    <button class="action-btn" onclick="showClearSheet()">
+      <div class="action-icon" style="color:var(--danger)">
+        <span class="material-icons-round">delete_sweep</span>
+      </div>
+      <span>Clear</span>
+    </button>
+  </div>
+</div>
+
+<div class="search-container">
+  <input type="text" class="search-box" id="search" placeholder="Search apps" oninput="filterApps()">
+</div>
+
+<div class="ios-list">
+  <div class="list-header">
+    <span id="list-title">User Apps</span>
+    <span class="toggle-text" onclick="toggleSystemApps()" id="header-toggle">Show System</span>
+  </div>
+  <div id="list">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>Loading...</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="hideBackup()"></div>
+<div class="modal" id="backup-modal">
+  <div class="modal-title">Backup & Restore</div>
+  <button class="modal-btn" onclick="exportBackup()">Export Blocklist</button>
+  <button class="modal-btn" onclick="importBackup()">Import Blocklist</button>
+  <button class="modal-btn cancel" onclick="hideBackup()">Cancel</button>
+</div>
+
+<div class="sheet-overlay" id="clear-overlay" onclick="hideClearSheet()"></div>
+<div class="sheet" id="clear-sheet">
+  <div class="sheet-card">
+    <div class="sheet-title">Clear all blocked apps?</div>
+    <button class="sheet-btn destructive" onclick="confirmClearAll()">Clear All</button>
+    <button class="sheet-btn" onclick="hideClearSheet()">Cancel</button>
+  </div>
+  <button class="sheet-cancel" onclick="hideClearSheet()">Cancel</button>
+</div>
+
+<script>
+const BLOCK_FILE="/data/adb/netblock/blocked_uids.txt";
+const BACKUP_DIR="/sdcard/Download";
+let showSystem=false;
+let allApps=[];
+let filteredApps=[];
+let blockedMap=new Map();
+let systemBlockedCount=0;
+
+function runShell(cmd,cb){
+  const k=window.parent?.ksu||window.ksu;
+  if(!k||!k.exec){cb?.(1,"","ksu not available");return}
+  const id="cb_"+Date.now()+"_"+(Math.random()*9999|0);
+  const t=setTimeout(()=>{delete(window.parent||window)[id];cb?.(1,"","timeout")},5000);
+  (window.parent||window)[id]=(code,stdout,stderr)=>{clearTimeout(t);delete(window.parent||window)[id];cb?.(code,stdout||"",stderr||"")};
+  k.exec(cmd,"{}",id)
+}
+
+function toast(msg){
+  if(window.ksu?.toast && document.hidden){
+    window.ksu.toast(msg);
+    return;
+  }
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+function enableFullScreen(){
+  try{
+    if(window.kernelsu?.fullScreen)return window.kernelsu.fullScreen(true);
+    if(window.fullScreen)return window.fullScreen(true);
+    if(ksu?.fullScreen)return ksu.fullScreen(true);
+    document.documentElement.requestFullscreen?.().catch(()=>{});
+  }catch{}
+}
+
+function isRunningOnWebUIX(){
+  return typeof moduleInterface!=='undefined'&&moduleInterface!==null;
+}
+
+function createShortcut(){
+  try{
+    if(isRunningOnWebUIX()){
+      if(moduleInterface.hasShortcut&&moduleInterface.hasShortcut()){
+        toast("Shortcut already exists");
+        return;
+      }
+      if(moduleInterface.createShortcut){
+        moduleInterface.createShortcut();
+        toast("Shortcut created");
+        return;
+      }
+    }
+    if(window.ksu&&typeof window.ksu.createShortcut==='function'){
+      window.ksu.createShortcut();
+      toast("Shortcut created");
+      return;
+    }
+    if(window.parent&&window.parent.ksu&&typeof window.parent.ksu.createShortcut==='function'){
+      window.parent.ksu.createShortcut();
+      toast("Shortcut created");
+      return;
+    }
+    toast("Shortcut not available");
+  }catch(e){
+    toast("Shortcut failed: "+e.message);
+  }
+}
+
+function openSupport(){
+  openLink("https://meowdump.github.io");
+}
+
+function openLink(url){
+  try{
+    if(window.ksu&&window.ksu.exec){
+      window.ksu.exec(`am start -a android.intent.action.VIEW -d ${url}`);
+      toast("Thankyou for your support");
+    }else if(window.parent&&window.parent.ksu&&window.parent.ksu.exec){
+      window.parent.ksu.exec(`am start -a android.intent.action.VIEW -d ${url}`);
+      toast("Thankyou for your support");
+    }else{
+      window.open(url,'_blank');
+    }
+  }catch(e){
+    toast("Failed to open link");
+  }
+}
+
+function init(){
+  enableFullScreen();
+  runShell("mkdir -p /data/adb/netblock && chmod 755 /data/adb/netblock && touch "+BLOCK_FILE+" && chmod 644 "+BLOCK_FILE,()=>loadApps());
+}
+
+function updateStatus(){
+  const card=document.getElementById("status-card");
+  const text=document.getElementById("status-text");
+  if(blockedMap.size===0){
+    card.classList.remove("active");
+    card.classList.add("inactive");
+    text.textContent="Inactive";
+  }else{
+    card.classList.remove("inactive");
+    card.classList.add("active");
+    text.textContent="Active";
+  }
+}
+
+function countSystemBlocked(){
+  systemBlockedCount=0;
+  const blockedUids=Array.from(blockedMap.keys());
+  if(blockedUids.length===0){
+    document.getElementById("system-blocked").textContent="0";
+    return;
+  }
+  runShell("pm list packages -U -s",(code,out)=>{
+    if(code===0&&out){
+      const systemUids=[];
+      out.trim().split("\n").forEach(line=>{
+        const match=line.match(/uid:(\d+)/);
+        if(match)systemUids.push(match[1]);
+      });
+      blockedUids.forEach(uid=>{
+        if(systemUids.includes(uid))systemBlockedCount++;
+      });
+      document.getElementById("system-blocked").textContent=systemBlockedCount;
+    }
+  });
+}
+
+function loadApps(){
+  document.getElementById("list").innerHTML='<div class="loading"><div class="spinner"></div><div>Loading...</div></div>';
+  runShell("cat "+BLOCK_FILE+" 2>/dev/null",(code,out)=>{
+    blockedMap.clear();
+    if(code===0&&out&&out.trim()){
+      out.trim().split("\n").forEach(line=>{
+        const parts=line.split("|");
+        if(parts.length>=2){
+          const uid=parts[0].trim();
+          const pkg=parts[1].trim();
+          if(uid&&pkg&&uid.match(/^\d+$/))blockedMap.set(uid,pkg)
+        }
+      })
+    }
+    updateStats();
+    updateStatus();
+    countSystemBlocked();
+    const cmd=showSystem?"pm list packages -U -s":"pm list packages -U -3";
+    runShell(cmd,(c,stdout,stderr)=>{
+      if(c!==0||!stdout||!stdout.trim()){
+        document.getElementById("list").innerHTML='<div class="empty">Failed to load apps</div>';
+        return
+      }
+      processPackages(stdout)
+    })
+  })
+}
+
+function processPackages(output){
+  const lines=output.trim().split("\n");
+  allApps=[];
+  lines.forEach(line=>{
+    const match=line.match(/package:(\S+)\s+uid:(\d+)/);
+    if(!match)return;
+    const [,pkg,uid]=match;
+    if(uid==="0"||uid==="1000"||uid==="1001"||uid==="2000")return;
+    allApps.push({uid:uid,package:pkg,name:pkg.split('.').pop().replace(/_/g,' '),blocked:blockedMap.has(uid)})
+  });
+  allApps.sort((a,b)=>{if(a.blocked!==b.blocked)return b.blocked-a.blocked;return a.name.localeCompare(b.name)});
+  filteredApps=[...allApps];
+  renderApps(filteredApps);
+  updateStats();
+  updateStatus();
+  toast("Loaded "+allApps.length+" apps")
+}
+
+function renderApps(apps){
+  const list=document.getElementById("list");
+  const filter=document.getElementById("search").value.toLowerCase();
+  const filtered=filter?apps.filter(a=>a.name.toLowerCase().includes(filter)||a.package.toLowerCase().includes(filter)):apps;
+  if(filtered.length===0){list.innerHTML='<div class="empty">No apps found</div>';return}
+  list.innerHTML=filtered.map(app=>`<div class="list-item ${app.blocked?'blocked':''}" data-uid="${app.uid}"><img class="app-icon" src="ksu://icon/${app.package}" onerror="this.style.opacity=0.3"><div class="app-info"><div class="app-name">${escapeHtml(app.name)}</div><div class="app-package">${escapeHtml(app.package)}</div></div><label class="ios-toggle"><input type="checkbox" ${app.blocked?'checked':''} onchange="toggleApp('${app.uid}','${app.package}',this)"><span class="toggle-slider"></span></label></div>`).join('')
+}
+
+function toggleApp(uid,pkg,checkbox){
+  const isBlocked=checkbox.checked;
+  const item=checkbox.closest('.list-item');
+  const name=item.querySelector('.app-name').textContent;
+  if(isBlocked){
+    item.classList.add('blocked');
+    blockedMap.set(uid,pkg);
+    toast("Blocking "+name+"...");
+    const line=uid+"|"+pkg+"\\n";
+    const cmd="printf '"+line+"' >> "+BLOCK_FILE;
+    runShell(cmd,(c)=>{
+      if(c===0){
+        runShell("iptables -C NETBLOCK -m owner --uid-owner "+uid+" -j DROP 2>/dev/null || iptables -A NETBLOCK -m owner --uid-owner "+uid+" -j DROP",()=>{
+          runShell("ip6tables -C NETBLOCK -m owner --uid-owner "+uid+" -j DROP 2>/dev/null || ip6tables -A NETBLOCK -m owner --uid-owner "+uid+" -j DROP",()=>{
+            toast(name+" offline");
+            updateStats();
+            updateStatus();
+            countSystemBlocked();
+          })
+        })
+      }else{
+        toast("Failed to save",true);
+        checkbox.checked=false;
+        item.classList.remove('blocked');
+        blockedMap.delete(uid)
+      }
+    })
+  }else{
+    item.classList.remove('blocked');
+    blockedMap.delete(uid);
+    toast("Unblocking "+name+"...");
+    let newContent="";
+    blockedMap.forEach((p,u)=>{newContent+=u+"|"+p+"\\n"});
+    const cmd=newContent===""?"> "+BLOCK_FILE:"printf '"+newContent+"' > "+BLOCK_FILE;
+    runShell(cmd,(c)=>{
+      if(c===0){
+        runShell("iptables -D NETBLOCK -m owner --uid-owner "+uid+" -j DROP 2>/dev/null; ip6tables -D NETBLOCK -m owner --uid-owner "+uid+" -j DROP 2>/dev/null",()=>{
+          toast(name+" online");
+          updateStats();
+          updateStatus();
+          countSystemBlocked();
+        })
+      }else{
+        toast("Failed to update",true);
+        checkbox.checked=true;
+        item.classList.add('blocked');
+        blockedMap.set(uid,pkg)
+      }
+    })
+  }
+}
+
+function toggleSystemApps(){
+  showSystem=!showSystem;
+  const icon=document.getElementById("system-icon");
+  const text=document.getElementById("system-text");
+  const headerToggle=document.getElementById("header-toggle");
+  const listTitle=document.getElementById("list-title");
+  if(showSystem){
+    icon.textContent="settings_applications";
+    text.textContent="System Apps";
+    headerToggle.textContent="Show User";
+    listTitle.textContent="System Apps";
+  }else{
+    icon.textContent="apps";
+    text.textContent="User Apps";
+    headerToggle.textContent="Show System";
+    listTitle.textContent="User Apps";
+  }
+  loadApps()
+}
+
+function filterApps(){
+  const filter=document.getElementById("search").value.toLowerCase();
+  filteredApps=filter?allApps.filter(a=>a.name.toLowerCase().includes(filter)||a.package.toLowerCase().includes(filter)):[...allApps];
+  renderApps(filteredApps)
+}
+
+function updateStats(){
+  document.getElementById("blocked-count").textContent=blockedMap.size;
+  document.getElementById("total-count").textContent=allApps.length;
+  document.getElementById("active-rules").textContent=blockedMap.size;
+}
+
+function showBackup(){document.getElementById("modal-overlay").classList.add("show");document.getElementById("backup-modal").classList.add("show")}
+function hideBackup(){document.getElementById("modal-overlay").classList.remove("show");document.getElementById("backup-modal").classList.remove("show")}
+
+function showClearSheet(){
+  if(blockedMap.size===0){
+    toast("Nothing to clear");
+    return;
+  }
+  document.getElementById("clear-overlay").classList.add("show");
+  document.getElementById("clear-sheet").classList.add("show");
+}
+
+function hideClearSheet(){
+  document.getElementById("clear-overlay").classList.remove("show");
+  document.getElementById("clear-sheet").classList.remove("show");
+}
+
+function confirmClearAll(){
+  hideClearSheet();
+  toast("Clearing all blocks...");
+  runShell("> "+BLOCK_FILE+" && iptables -F NETBLOCK && ip6tables -F NETBLOCK",(c)=>{
+    if(c===0){
+      blockedMap.clear();
+      toast("All apps online");
+      updateStatus();
+      countSystemBlocked();
+      loadApps();
+    }else{
+      toast("Failed to clear");
+    }
+  });
+}
+
+function exportBackup(){
+  const data={version:1,timestamp:new Date().toISOString(),blocked:Array.from(blockedMap.entries()).map(([uid,pkg])=>({uid,package:pkg}))};
+  const fileName="netblock-backup-"+new Date().toISOString().split("T")[0]+".json";
+  const filePath=BACKUP_DIR+"/"+fileName;
+  const jsonContent=JSON.stringify(data,null,2).replace(/"/g,'\\"');
+  runShell(`echo "${jsonContent}" > ${filePath}`,(c)=>{
+    if(c===0){
+      hideBackup();
+      toast("Exported to Download");
+    }else{
+      toast("Export failed");
+    }
+  });
+}
+
+function importBackup(){
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json";
+  input.onchange=(e)=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=(ev)=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!data.blocked||!Array.isArray(data.blocked))throw new Error("Invalid format");
+        hideBackup();
+        toast("Importing "+data.blocked.length+" apps...");
+        let content="";
+        data.blocked.forEach(app=>{if(app.uid&&app.package)content+=app.uid+"|"+app.package+"\\n"});
+        const cmd=content===""?"> "+BLOCK_FILE:"printf '"+content+"' > "+BLOCK_FILE;
+        runShell(cmd,(c)=>{
+          if(c===0){
+            runShell("iptables -F NETBLOCK && ip6tables -F NETBLOCK",()=>{
+              let done=0;
+              const total=data.blocked.length;
+              if(total===0){toast("Import complete");loadApps();return}
+              data.blocked.forEach(app=>{
+                if(!app.uid){done++;return}
+                runShell("iptables -A NETBLOCK -m owner --uid-owner "+app.uid+" -j DROP && ip6tables -A NETBLOCK -m owner --uid-owner "+app.uid+" -j DROP",()=>{done++;if(done===total){toast("Import complete");loadApps()}})
+              })
+            })
+          }else{toast("Import failed")}
+        })
+      }catch(err){toast("Import failed: "+err.message)}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function clearAll(){
+  if(blockedMap.size===0){toast("Nothing to clear");return}
+  if(!confirm("Clear all blocked apps?"))return;
+  hideBackup();
+  toast("Clearing all blocks...");
+  runShell("> "+BLOCK_FILE+" && iptables -F NETBLOCK && ip6tables -F NETBLOCK",(c)=>{
+    if(c===0){blockedMap.clear();toast("All apps online");updateStatus();countSystemBlocked();loadApps()}else{toast("Failed to clear")}
+  })
+}
+
+function verifyRules(){
+  runShell("iptables -L NETBLOCK -n 2>/dev/null | grep -c 'owner UID match'",(c,out)=>{
+    const iptablesCount=parseInt(out)||0;
+    const fileCount=blockedMap.size;
+    if(iptablesCount===fileCount){toast("Rules verified: "+iptablesCount+" active")}else{toast("Mismatch: File has "+fileCount+", iptables has "+iptablesCount+". Reapplying...",true);reapplyAllRules()}
+  })
+}
+
+function reapplyAllRules(){
+  toast("Reapplying all rules...");
+  runShell("iptables -F NETBLOCK && ip6tables -F NETBLOCK",()=>{
+    let done=0;
+    if(blockedMap.size===0){toast("No rules to apply");return}
+    blockedMap.forEach((pkg,uid)=>{runShell("iptables -A NETBLOCK -m owner --uid-owner "+uid+" -j DROP && ip6tables -A NETBLOCK -m owner --uid-owner "+uid+" -j DROP",()=>{done++;if(done===blockedMap.size)toast("All rules reapplied")})})
+  })
+}
+
+function escapeHtml(text){const div=document.createElement("div");div.textContent=text;return div.innerHTML}
+
+init()
+</script>
+</body>
+</html>
